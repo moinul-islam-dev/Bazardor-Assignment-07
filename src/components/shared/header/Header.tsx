@@ -1,5 +1,4 @@
 import Link from "next/link";
-import AuthenticationButtons from "./AuthenticationButtons";
 import LiveDate from "./LiveDate";
 import Marquee from "./Marquee";
 import NavLinks from "./NavLinks";
@@ -30,7 +29,6 @@ export default function Header() {
         {/* Right Side: Profile Dropdown */}
         <ProfileDropDown />
 
-        {/* <AuthenticationButtons /> */}
       </div>
 
       {/* Bottom Category Navigation (Using Next.js Link) */}

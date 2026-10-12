@@ -2,7 +2,6 @@
 
 import {
   Button,
-  Description,
   FieldError,
   Form,
   Input,
@@ -10,14 +9,11 @@ import {
   TextField,
 } from "@heroui/react";
 import Link from "next/link";
-
-import { authClient } from "@/lib/auth-client";
-
+import { useRouter } from "next/navigation";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
-import { router } from "better-auth/api";
-import { redirect } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 interface User {
   name: string;
@@ -27,6 +23,7 @@ interface User {
 }
 
 export default function SignUpPage() {
+  const router = useRouter();
 
   const wrongPasswordError = () => toast.error("পাসওয়ার্ড মেলেনি");
 
@@ -38,60 +35,66 @@ export default function SignUpPage() {
 
   const numberError = () => toast.error("পাসওয়ার্ডে কমপক্ষে একটি সংখ্যা থাকতে হবে");
 
-
-
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const formData = new FormData(e.currentTarget);
+
     const user: User = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
       password: formData.get("password") as string,
       rewritePassword: formData.get("rewritePassword") as string,
-    }
+    };
 
     if (user.password !== user.rewritePassword) {
       wrongPasswordError();
       return;
     }
 
-    const { data: userData, error } = await authClient.signUp.email({
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      callbackURL: "/"
-    })
+    try {
+      const { data: userData, error } = await authClient.signUp.email({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        callbackURL: "/",
+      });
 
-    if (error) {
-      toast.error(error.message);
-      console.log(error.message)
-      return;
-    }
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
 
-    if (userData) {
-      toast.success("সফলভাবে সাইন আপ হয়েছে।");
-      console.log(userData)
-      redirect("/");
+      if (userData) {
+        toast.success("সফলভাবে সাইন আপ হয়েছে।");
+        router.push("/");
+      }
+    } catch {
+      toast.error("সাইন আপ করা যায়নি। আবার চেষ্টা করুন।");
     }
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4">
-      {/* Header section */}
-      <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold text-gray-900">অ্যাকাউন্ট তৈরি করুন</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          বিনামূল্যে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
-        </p>
-      </div>
+    <main className="flex min-h-dvh w-full flex-col items-center justify-center bg-transparent px-4 py-8 sm:px-6 sm:py-12">
+      {/* Header */}
+      <header className="mb-5 w-full max-w-md text-center sm:mb-6">
+        <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
+          অ্যাকাউন্ট তৈরি করুন
+        </h1>
 
-      {/* Card Container */}
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+        <p className="mt-2 text-sm leading-6 text-gray-500">
+          বিনামূল্যে সাইন আপ করে সব বিস্তারিত দাম দেখো।
+        </p>
+      </header>
+
+      {/* Form Card */}
+      <section className="w-full max-w-md min-w-0 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-8">
         <Form
-          className="flex w-full flex-col gap-4"
+          className="flex w-full min-w-0 flex-col gap-4"
           render={(props) => <form {...props} data-custom="foo" />}
           onSubmit={onSubmit}
         >
+          {/* Name */}
           <TextField
             isRequired
             name="name"
@@ -103,13 +106,16 @@ export default function SignUpPage() {
             }}
           >
             <Label className="text-sm font-medium text-gray-700">নাম</Label>
+
             <Input
-              className="mt-1"
+              className="mt-1 w-full min-w-0"
               placeholder="যেমন: রহিম উদ্দিন"
             />
+
             <FieldError />
           </TextField>
 
+          {/* Email */}
           <TextField
             isRequired
             name="email"
@@ -122,13 +128,16 @@ export default function SignUpPage() {
             }}
           >
             <Label className="text-sm font-medium text-gray-700">ইমেইল</Label>
+
             <Input
-              className="mt-1"
+              className="mt-1 w-full min-w-0"
               placeholder="you@example.com"
             />
+
             <FieldError />
           </TextField>
 
+          {/* Password */}
           <TextField
             isRequired
             minLength={8}
@@ -137,90 +146,97 @@ export default function SignUpPage() {
             validate={(value) => {
               if (value.length < 8) {
                 passwordLenghtError();
-                return;
+                return "পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে";
               }
+
               if (!/[A-Z]/.test(value)) {
                 uppercaseError();
-                return;
+                return "কমপক্ষে একটি বড় অক্ষর ব্যবহার করো";
               }
+
               if (!/[0-9]/.test(value)) {
                 numberError();
-                return;
+                return "কমপক্ষে একটি সংখ্যা ব্যবহার করো";
               }
+
               return null;
             }}
           >
             <Label className="text-sm font-medium text-gray-700">পাসওয়ার্ড</Label>
+
             <Input
-              className="mt-1"
+              className="mt-1 w-full min-w-0"
               placeholder="কমপক্ষে ৮ অক্ষর"
             />
+
             <FieldError />
           </TextField>
 
+          {/* Confirm Password */}
           <TextField
             isRequired
             minLength={8}
             name="rewritePassword"
             type="password"
-            validate={(value) => {
-              return null;
-            }}
           >
-            <Label className="text-sm font-medium text-gray-700">পাসওয়ার্ড নিশ্চিত করুন</Label>
-            <Input
-              className="mt-1"
-              placeholder="আবার লিখুন"
-            />
+            <Label className="text-sm font-medium text-gray-700">
+              পাসওয়ার্ড নিশ্চিত করো
+            </Label>
+
+            <Input className="mt-1 w-full min-w-0" placeholder="আবার লিখো" />
+
             <FieldError />
           </TextField>
 
+          {/* Submit */}
           <Button
             type="submit"
-            className="w-full bg-[#00873E] text-white font-medium py-2.5 rounded-lg hover:bg-[#007032] transition-colors mt-2"
+            className="mt-2 min-h-11 w-full rounded-lg bg-[#00873E] px-4 py-2.5 font-medium text-white transition-colors hover:bg-[#007032]"
           >
             অ্যাকাউন্ট তৈরি করুন
           </Button>
 
           {/* Divider */}
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-gray-200"></div>
-            <span className="flex-shrink mx-4 text-gray-400 text-xs">অথবা</span>
-            <div className="flex-grow border-t border-gray-200"></div>
+          <div className="flex w-full items-center gap-3 py-2">
+            <div className="h-px min-w-0 flex-1 bg-gray-200" />
+
+            <span className="shrink-0 text-xs text-gray-400">অথবা</span>
+
+            <div className="h-px min-w-0 flex-1 bg-gray-200" />
           </div>
 
-          {/* Social Logins */}
-          <div className="flex items-center justify-between w-full gap-3">
-            <Button
-              className="w-full flex items-center justify-center gap-2 border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 py-2.5 rounded-lg font-medium"
-              variant="tertiary"
-            >
-              <FcGoogle size={20} />
-              Google দিয়ে চালিয়ে যান
+          {/* Social Login */}
+          <div className="grid w-full min-w-0 grid-cols-1 gap-3 sm:grid-cols-2">
+            <Button className="w-full" variant="tertiary">
+              <FcGoogle />
+              Sign up with Google
             </Button>
-            <Button
-              className="w-full flex items-center justify-center gap-2 border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 py-2.5 rounded-lg font-medium"
-              variant="tertiary"
-            >
-              <FaGithub size={20} />
-              GitHub দিয়ে চালিয়ে যান
+            <Button className="w-full" variant="tertiary">
+              <FaGithub />
+              Sign up with GitHub
             </Button>
           </div>
 
-          {/* Footer links inside card */}
-          <div className="text-center text-sm text-gray-600 mt-4">
+          {/* Sign In */}
+          <p className="mt-2 w-full text-center text-sm leading-6 text-gray-600">
             অ্যাকাউন্ট আছে?{" "}
-            <a href="#" className="text-[#00873E] font-medium hover:underline">
-              সাইন ইন করুন
-            </a>
-          </div>
+            <Link
+              href="/signin"
+              className="font-medium text-[#00873E] hover:underline"
+            >
+              সাইন ইন করো
+            </Link>
+          </p>
         </Form>
-      </div>
+      </section>
 
-      {/* Bottom Back Link */}
-      <Link href="/" className="mt-6 text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
-        ← হোম পেজে ফিরে যান
+      {/* Back to Home */}
+      <Link
+        href="/"
+        className="mt-6 rounded-sm text-center text-sm text-gray-500 hover:text-gray-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00873E]"
+      >
+        ← হোম পেজে ফিরে যাও
       </Link>
-    </div>
+    </main>
   );
 }

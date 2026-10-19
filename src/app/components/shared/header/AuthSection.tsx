@@ -13,7 +13,7 @@ const AuthSection = async () => {
 
   return (
     <div>
-      {user ? <ProfileDropDown name={name} /> : <AuthenticationButtons />}
+      {user ? <ProfileDropDown user={user} /> : <AuthenticationButtons />}
     </div>
   );
 };

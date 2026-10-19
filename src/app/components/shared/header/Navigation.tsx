@@ -3,7 +3,7 @@ import AuthSection from "./AuthSection";
 import LiveDate from "./LiveDate";
 import Marquee from "./Marquee";
 import NavLinks from "./NavLinks";
-import ProfileDropDown from "./ProfileDropDown";
+
 
 export default function Navigation() {
   return (

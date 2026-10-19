@@ -1,6 +1,5 @@
 "use client";
 
-import { signIn, signUp, signInSocial } from "@/lib/actions/auth-actions";
 import { Button, Form, Input, Label } from "@heroui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,11 +7,11 @@ import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineError } from "react-icons/md";
+import { signInSocial, signUp } from "@/lib/actions/auth-actions";
 
-export const AuthClientPage = () => {
+const SignUpPage = () => {
   const router = useRouter();
 
-  const [isSignIn, setIsSignIn] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,15 +27,14 @@ export const AuthClientPage = () => {
       // TODO: Better Auth social sign-in logic
       // console.log(`handleSocial: ${provider}`);
 
+      // images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop) on `next/image`, hostname "
+
       const url = await signInSocial(provider);
 
       window.location.assign(url);
-
-
     } catch (err) {
       setError(
-        `Authentication error: ${
-          err instanceof Error ? err.message : "Unknown error"
+        `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
         }`,
       );
     } finally {
@@ -49,7 +47,7 @@ export const AuthClientPage = () => {
 
     setError("");
 
-    if (!isSignIn && password !== confirmPassword) {
+    if (password !== confirmPassword) {
       setError("পাসওয়ার্ড দুটি মেলেনি!");
       return;
     }
@@ -57,34 +55,25 @@ export const AuthClientPage = () => {
     setIsLoading(true);
 
     try {
-      if (isSignIn) {
-        // TODO: Better Auth sign-in logic
-        // console.log("sign-in", { email, password });
-        const res = await signIn({email, password});
 
-        if(!res.user) {
-          setError("Invalid email or password");
-        } 
-        
-      } else {
-        // TODO: Better Auth sign-up logic
-        // console.log("sign-up", { name, email, password });
+      // TODO: Better Auth sign-up logic
+      // console.log("sign-up", { name, email, password });
 
-        const res = await signUp({name, email, password});
+      const res = await signUp({ name, email, password });
 
-        if(!res.user) {
-          setError("Failed to create an account");
-        }
-
+      if (!res.user) {
+        setError("Failed to create an account");
       }
+
 
       // TODO: Redirect only after successful authentication
       router.replace("/");
       router.refresh();
+
+
     } catch (err) {
       setError(
-        `Authentication error: ${
-          err instanceof Error ? err.message : "Unknown error"
+        `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
         }`,
       );
     } finally {
@@ -92,23 +81,17 @@ export const AuthClientPage = () => {
     }
   };
 
-  const toggleAuthMode = () => {
-    setIsSignIn((previous) => !previous);
-    setError("");
-    setConfirmPassword("");
-  };
+
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#f3f6f3] px-4 py-12 sm:px-6 lg:px-8">
       <header className="mb-8 max-w-md text-center">
         <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-800">
-          {isSignIn ? "সাইন ইন" : "অ্যাকাউন্ট তৈরি করুন"}
+          {"অ্যাকাউন্ট তৈরি করুন"}
         </h1>
 
         <p className="text-sm text-gray-600">
-          {isSignIn
-            ? "বিস্তারিত দাম, বাজার তুলনা ও প্রোফাইল দেখতে অ্যাকাউন্টে ঢুকুন।"
-            : "বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।"}
+          {"বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।"}
         </p>
       </header>
 
@@ -125,7 +108,7 @@ export const AuthClientPage = () => {
         )}
 
         <Form onSubmit={handleEmailAuth} className="flex w-full flex-col gap-4">
-          {!isSignIn && (
+          {(
             <div className="flex w-full flex-col gap-1">
               <Label
                 htmlFor="name"
@@ -184,14 +167,14 @@ export const AuthClientPage = () => {
               placeholder="কমপক্ষে ৮ অক্ষর"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              autoComplete={isSignIn ? "current-password" : "new-password"}
+              autoComplete={"new-password"}
               minLength={8}
               required
               className="w-full"
             />
           </div>
 
-          {!isSignIn && (
+          {(
             <div className="flex w-full flex-col gap-1">
               <Label
                 htmlFor="confirmPassword"
@@ -222,9 +205,7 @@ export const AuthClientPage = () => {
           >
             {isLoading
               ? "অপেক্ষা করুন..."
-              : isSignIn
-                ? "সাইন ইন"
-                : "অ্যাকাউন্ট তৈরি করুন"}
+              : "অ্যাকাউন্ট তৈরি করুন"}
           </Button>
         </Form>
 
@@ -263,15 +244,16 @@ export const AuthClientPage = () => {
         </div>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          {isSignIn ? "অ্যাকাউন্ট নেই? " : "অ্যাকাউন্ট আছে? "}
+          {"অ্যাকাউন্ট আছে? "}
 
           <button
             type="button"
-            onClick={toggleAuthMode}
             disabled={isLoading}
             className="cursor-pointer font-semibold text-[#058240] hover:underline disabled:opacity-50"
           >
-            {isSignIn ? "সাইন আপ করুন" : "সাইন ইন করুন"}
+            <Link href="/sign-in">
+              {"সাইন ইন করুন"}
+            </Link>
           </button>
         </div>
       </section>
@@ -287,3 +269,5 @@ export const AuthClientPage = () => {
     </main>
   );
 };
+
+export default SignUpPage;

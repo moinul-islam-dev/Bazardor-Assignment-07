@@ -82,19 +82,19 @@ const Home = async () => {
   const allItems: Item[] = await loadAllItems();
 
   const upPricedItems = getUpPricedItems(allItems);
-  
-  const  downPricedItems = getDownPricedItems(allItems);
+
+  const downPricedItems = getDownPricedItems(allItems);
 
 
 
-  return(
+  return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       {/* Banner Section */}
       <BannerSection />
 
       {/* Products Section */}
       <section id="products" className="mt-10 space-y-12">
-        
+
         {/* দাম বৃদ্ধি পাওয়া পণ্যের তালিকা */}
         {upPricedItems.length > 0 && (
           <div>
@@ -102,13 +102,15 @@ const Home = async () => {
               <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
                 <span className="text-red-500">▲</span> দাম বেড়েছে যে পণ্যগুলোর
               </h2>
-              
+
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {upPricedItems.slice(0, 6).map((item) => (
                 <ItemCard
                   key={item.id}
+                  categoryId={item.category}
+                  productId={item.id}
                   nameBn={item.nameBn}
                   unit={item.unit}
                   image={item.image}
@@ -127,13 +129,15 @@ const Home = async () => {
               <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
                 <span className="text-green-500">▼</span> দাম কমেছে যে পণ্যগুলোর
               </h2>
-              
+
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {downPricedItems.slice(0, 6).map((item) => (
                 <ItemCard
                   key={item.id}
+                  categoryId={item.category}
+                  productId={item.id}
                   nameBn={item.nameBn}
                   unit={item.unit}
                   image={item.image}
@@ -151,18 +155,20 @@ const Home = async () => {
             <div className="mb-6 flex items-center justify-between">
               <div className="flex flex-col">
                 <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
-                সব পণ্য
-              </h2>
+                  সব পণ্য
+                </h2>
                 মোট {allItems.length} টি পণ্য দেখানো হচ্ছে
 
               </div>
-              
+
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {allItems.map((item) => (
                 <ItemCard
                   key={item.id}
+                  categoryId={item.category}
+                  productId={item.id}
                   nameBn={item.nameBn}
                   unit={item.unit}
                   image={item.image}

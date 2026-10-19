@@ -1,4 +1,5 @@
 import ItemCard from "@/app/components/home/ItemCard";
+import ProductSorting from "@/app/components/home/ProductSorting";
 
 export interface MarketPrice {
     market: string;
@@ -101,26 +102,7 @@ export default async function Page({
                 </section>
 
                 {/* Sorting UI */}
-                <section className="flex items-center justify-end rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
-                    <div className="flex items-center gap-3">
-                        <label
-                            htmlFor="sort-products"
-                            className="text-sm font-medium text-gray-600"
-                        >
-                            সাজান
-                        </label>
-
-                        <select
-                            id="sort-products"
-                            defaultValue="default"
-                            className="cursor-pointer rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-300"
-                        >
-                            <option value="default">ডিফল্ট</option>
-                            <option value="low-to-high">দাম: কম থেকে বেশি</option>
-                            <option value="high-to-low">দাম: বেশি থেকে কম</option>
-                        </select>
-                    </div>
-                </section>
+                <ProductSorting items={items} />
 
                 {/* Total Products */}
                 <p className="text-sm font-medium text-gray-600">

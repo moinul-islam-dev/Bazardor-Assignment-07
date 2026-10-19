@@ -1,9 +1,9 @@
 import Link from "next/link";
+import AuthSection from "./AuthSection";
 import LiveDate from "./LiveDate";
 import Marquee from "./Marquee";
 import NavLinks from "./NavLinks";
 import ProfileDropDown from "./ProfileDropDown";
-import AuthSection from "./AuthSection";
 
 export default function Navigation() {
   return (

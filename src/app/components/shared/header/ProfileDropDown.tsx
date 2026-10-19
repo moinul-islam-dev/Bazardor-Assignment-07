@@ -7,19 +7,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { signOut } from "@/lib/actions/auth-actions";
-
+import { useState } from "react";
 
 interface ProfileDropDownProps {
     name: string | undefined;
 }
 
 
+
 const ProfileDropDown = ({ name }: ProfileDropDownProps) => {
-
-
-
     const router = useRouter();
-
 
     const handleSignOut = async () => {
         try {
@@ -29,9 +26,9 @@ const ProfileDropDown = ({ name }: ProfileDropDownProps) => {
                 toast.error("লগ আউট সফল হয়নি।");
                 return;
             }
-            
+
             toast.success("লগ আউট সফল হয়েছে। ");
-            
+
             router.replace("/");
             router.refresh();
         } catch (error) {
@@ -41,7 +38,6 @@ const ProfileDropDown = ({ name }: ProfileDropDownProps) => {
         }
     };
 
-
     return (
         <div>
             <Dropdown>
@@ -50,13 +46,15 @@ const ProfileDropDown = ({ name }: ProfileDropDownProps) => {
                         type="button"
                         className="flex items-center gap-2 rounded-full bg-gray-100 p-1.5 pr-3 transition-colors hover:bg-gray-200/80"
                     >
-                        <Image
-                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop"
-                            alt="User Profile"
-                            width={36}
-                            height={36}
-                            className="rounded-full object-cover"
-                        />
+                        {name ? (
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-sm font-bold uppercase text-green-700">
+                                {name.trim().charAt(0).toUpperCase()}
+                            </div>
+                        ) : (
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-sm font-bold text-green-700">
+                                U
+                            </div>
+                        )}
 
                         <span className="text-sm font-semibold text-gray-800">
                             {name || "User"}
@@ -71,17 +69,15 @@ const ProfileDropDown = ({ name }: ProfileDropDownProps) => {
                     className="min-w-48 rounded-xl border border-gray-100 bg-white p-1 shadow-lg"
                 >
                     <Dropdown.Menu>
-                        <Dropdown.Item id="profile" textValue="প্রোফাইল">
-                            <Label>
-                                <Link href="/profile">প্রোফাইল</Link>
-                            </Label>
+                        <Dropdown.Item
+                            id="profile"
+                            textValue="প্রোফাইল"
+                            onClick={() => router.push("/profile")}
+                        >
+                            {/* <Link href="/profile">প্রোফাইল</Link> */}
+                            প্রোফাইল
                         </Dropdown.Item>
 
-                        <Dropdown.Item id="settings" textValue="সেটিংস">
-                            <Label>
-                                <Link href="/settings">সেটিংস</Link>
-                            </Label>
-                        </Dropdown.Item>
 
                         <Separator />
 

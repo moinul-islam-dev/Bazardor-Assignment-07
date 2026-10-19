@@ -7,8 +7,8 @@ import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineError } from "react-icons/md";
-import { signIn, signInSocial } from "@/lib/actions/auth-actions";
 import { toast } from "react-toastify";
+import { signIn, signInSocial } from "@/lib/actions/auth-actions";
 
 const SignInPage = () => {
   const router = useRouter();
@@ -33,7 +33,8 @@ const SignInPage = () => {
       toast.success("লগ ইন সফল হয়েছে");
     } catch (err) {
       setError(
-        `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
+        `Authentication error: ${
+          err instanceof Error ? err.message : "Unknown error"
         }`,
       );
 
@@ -42,24 +43,23 @@ const SignInPage = () => {
       setIsLoading(false);
     }
   };
-  
+
   const handleEmailAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     setError("");
-    
+
     setIsLoading(true);
-    
+
     try {
-      
       // TODO: Better Auth sign-in logic
       // console.log("sign-in", { email, password });
       const res = await signIn({ email, password });
-      
+
       if (!res.user) {
         setError("Invalid email or password");
       }
-      
+
       // TODO: Redirect only after successful authentication
       toast.success("লগ ইন সফল হয়েছে");
 
@@ -67,7 +67,8 @@ const SignInPage = () => {
       router.refresh();
     } catch (err) {
       setError(
-        `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
+        `Authentication error: ${
+          err instanceof Error ? err.message : "Unknown error"
         }`,
       );
 
@@ -76,7 +77,6 @@ const SignInPage = () => {
       setIsLoading(false);
     }
   };
-
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#f3f6f3] px-4 py-12 sm:px-6 lg:px-8">
@@ -86,7 +86,7 @@ const SignInPage = () => {
         </h1>
 
         <p className="text-sm text-gray-600">
-          { "বিস্তারিত দাম, বাজার তুলনা ও প্রোফাইল দেখতে অ্যাকাউন্টে ঢুকুন।" }
+          {"বিস্তারিত দাম, বাজার তুলনা ও প্রোফাইল দেখতে অ্যাকাউন্টে ঢুকুন।"}
         </p>
       </header>
 
@@ -103,8 +103,6 @@ const SignInPage = () => {
         )}
 
         <Form onSubmit={handleEmailAuth} className="flex w-full flex-col gap-4">
-          
-
           <div className="flex w-full flex-col gap-1">
             <Label
               htmlFor="email"
@@ -141,22 +139,19 @@ const SignInPage = () => {
               placeholder="কমপক্ষে ৮ অক্ষর"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              autoComplete={ "current-password" }
+              autoComplete={"current-password"}
               minLength={8}
               required
               className="w-full"
             />
           </div>
 
-
           <Button
             type="submit"
             isDisabled={isLoading}
             className="mt-2 w-full rounded-lg bg-[#058240] py-2.5 font-medium text-white shadow-sm transition-colors hover:bg-[#046c35] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isLoading
-              ? "অপেক্ষা করুন..."
-              : "সাইন ইন"}
+            {isLoading ? "অপেক্ষা করুন..." : "সাইন ইন"}
           </Button>
         </Form>
 
@@ -202,9 +197,7 @@ const SignInPage = () => {
             disabled={isLoading}
             className="cursor-pointer font-semibold text-[#058240] hover:underline disabled:opacity-50"
           >
-            <Link href="/sign-up">
-              { "সাইন আপ করুন" }
-            </Link>
+            <Link href="/sign-up">{"সাইন আপ করুন"}</Link>
           </button>
         </div>
       </section>
@@ -220,6 +213,5 @@ const SignInPage = () => {
     </main>
   );
 };
-
 
 export default SignInPage;

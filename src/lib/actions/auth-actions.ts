@@ -8,9 +8,22 @@ interface SignUpProps {
   email: string;
   password: string;
 }
+
 interface SignInProps {
   email: string;
   password: string;
+}
+
+interface UpdateUserProps {
+  name: string;
+}
+
+export async function getCurrentUser() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  return session?.user ?? null;
 }
 
 export const signUp = async ({ name, email, password }: SignUpProps) => {
@@ -86,3 +99,57 @@ export const signOut = async () => {
 
   return result;
 };
+
+export async function updateUser({ name }: UpdateUserProps) {
+  try {
+    const requestHeaders = await headers();
+
+    // Get the currently authenticated user's session.
+    const session = await auth.api.getSession({
+      headers: requestHeaders,
+    });
+
+    if (!session) {
+      return {
+        success: false,
+        message: "তোমাকে আগে লগইন করতে হবে।",
+      };
+    }
+
+    const trimmedName = name.trim();
+
+    if (!trimmedName) {
+      return {
+        success: false,
+        message: "নাম খালি রাখা যাবে না।",
+      };
+    }
+
+    if (trimmedName.length > 100) {
+      return {
+        success: false,
+        message: "নাম সর্বোচ্চ ১০০ অক্ষরের হতে পারবে।",
+      };
+    }
+
+    // Better Auth updates the user associated with this session.
+    await auth.api.updateUser({
+      headers: requestHeaders,
+      body: {
+        name: trimmedName,
+      },
+    });
+
+    return {
+      success: true,
+      message: "প্রোফাইল সফলভাবে আপডেট হয়েছে।",
+    };
+  } catch (error) {
+    console.error("Update user error:", error);
+
+    return {
+      success: false,
+      message: "প্রোফাইল আপডেট করা যায়নি।",
+    };
+  }
+}

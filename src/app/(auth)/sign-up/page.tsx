@@ -7,8 +7,8 @@ import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineError } from "react-icons/md";
-import { signInSocial, signUp } from "@/lib/actions/auth-actions";
 import { toast } from "react-toastify";
+import { signInSocial, signUp } from "@/lib/actions/auth-actions";
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -35,16 +35,14 @@ const SignUpPage = () => {
       window.location.assign(url);
 
       toast.success("সাইন আপ সফল হয়েছে");
-
     } catch (err) {
-
       setError(
-        `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
+        `Authentication error: ${
+          err instanceof Error ? err.message : "Unknown error"
         }`,
       );
 
       toast.error("সাইন আপ সফল হয়নি");
-
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +61,6 @@ const SignUpPage = () => {
     setIsLoading(true);
 
     try {
-
       // TODO: Better Auth sign-up logic
       // console.log("sign-up", { name, email, password });
 
@@ -78,11 +75,10 @@ const SignUpPage = () => {
       // TODO: Redirect only after successful authentication
       router.replace("/");
       router.refresh();
-
-
     } catch (err) {
       setError(
-        `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
+        `Authentication error: ${
+          err instanceof Error ? err.message : "Unknown error"
         }`,
       );
 
@@ -91,8 +87,6 @@ const SignUpPage = () => {
       setIsLoading(false);
     }
   };
-
-
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#f3f6f3] px-4 py-12 sm:px-6 lg:px-8">
@@ -119,7 +113,7 @@ const SignUpPage = () => {
         )}
 
         <Form onSubmit={handleEmailAuth} className="flex w-full flex-col gap-4">
-          {(
+          {
             <div className="flex w-full flex-col gap-1">
               <Label
                 htmlFor="name"
@@ -140,7 +134,7 @@ const SignUpPage = () => {
                 className="w-full"
               />
             </div>
-          )}
+          }
 
           <div className="flex w-full flex-col gap-1">
             <Label
@@ -185,7 +179,7 @@ const SignUpPage = () => {
             />
           </div>
 
-          {(
+          {
             <div className="flex w-full flex-col gap-1">
               <Label
                 htmlFor="confirmPassword"
@@ -207,16 +201,14 @@ const SignUpPage = () => {
                 className="w-full"
               />
             </div>
-          )}
+          }
 
           <Button
             type="submit"
             isDisabled={isLoading}
             className="mt-2 w-full rounded-lg bg-[#058240] py-2.5 font-medium text-white shadow-sm transition-colors hover:bg-[#046c35] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isLoading
-              ? "অপেক্ষা করুন..."
-              : "অ্যাকাউন্ট তৈরি করুন"}
+            {isLoading ? "অপেক্ষা করুন..." : "অ্যাকাউন্ট তৈরি করুন"}
           </Button>
         </Form>
 
@@ -262,9 +254,7 @@ const SignUpPage = () => {
             disabled={isLoading}
             className="cursor-pointer font-semibold text-[#058240] hover:underline disabled:opacity-50"
           >
-            <Link href="/sign-in">
-              {"সাইন ইন করুন"}
-            </Link>
+            <Link href="/sign-in">{"সাইন ইন করুন"}</Link>
           </button>
         </div>
       </section>

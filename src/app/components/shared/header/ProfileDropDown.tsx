@@ -20,18 +20,27 @@ const ProfileDropDown = ({ name }: ProfileDropDownProps) => {
 
     const router = useRouter();
 
+
     const handleSignOut = async () => {
         try {
-            await signOut();
+            const result = await signOut();
 
-            toast.success("Logged out successfully!");
-
+            if (!result.success) {
+                toast.error("লগ আউট সফল হয়নি।");
+                return;
+            }
+            
+            toast.success("লগ আউট সফল হয়েছে। ");
+            
             router.replace("/");
             router.refresh();
-        } catch {
-            toast.error("Failed to log out!");
+        } catch (error) {
+            console.error("Logout error:", error);
+            // toast.error("Failed to log out!");
+            toast.error("লগ আউট সফল হয়নি।");
         }
     };
+
 
     return (
         <div>

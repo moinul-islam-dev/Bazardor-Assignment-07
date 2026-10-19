@@ -8,6 +8,7 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineError } from "react-icons/md";
 import { signInSocial, signUp } from "@/lib/actions/auth-actions";
+import { toast } from "react-toastify";
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -32,11 +33,18 @@ const SignUpPage = () => {
       const url = await signInSocial(provider);
 
       window.location.assign(url);
+
+      toast.success("সাইন আপ সফল হয়েছে");
+
     } catch (err) {
+
       setError(
         `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
         }`,
       );
+
+      toast.error("সাইন আপ সফল হয়নি");
+
     } finally {
       setIsLoading(false);
     }
@@ -65,6 +73,7 @@ const SignUpPage = () => {
         setError("Failed to create an account");
       }
 
+      toast.success("সাইন আপ সফল হয়েছে");
 
       // TODO: Redirect only after successful authentication
       router.replace("/");
@@ -76,6 +85,8 @@ const SignUpPage = () => {
         `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
         }`,
       );
+
+      toast.error("সাইন আপ সফল হয়নি।");
     } finally {
       setIsLoading(false);
     }

@@ -8,6 +8,7 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineError } from "react-icons/md";
 import { signIn, signInSocial } from "@/lib/actions/auth-actions";
+import { toast } from "react-toastify";
 
 const SignInPage = () => {
   const router = useRouter();
@@ -28,34 +29,40 @@ const SignInPage = () => {
       const url = await signInSocial(provider);
 
       window.location.assign(url);
+
+      toast.success("লগ ইন সফল হয়েছে");
     } catch (err) {
       setError(
         `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
         }`,
       );
+
+      toast.error("লগ ইন সফল হয়নি।");
     } finally {
       setIsLoading(false);
     }
   };
-
+  
   const handleEmailAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    
     setError("");
-
+    
     setIsLoading(true);
-
+    
     try {
-
+      
       // TODO: Better Auth sign-in logic
       // console.log("sign-in", { email, password });
       const res = await signIn({ email, password });
-
+      
       if (!res.user) {
         setError("Invalid email or password");
       }
       
       // TODO: Redirect only after successful authentication
+      toast.success("লগ ইন সফল হয়েছে");
+
       router.replace("/");
       router.refresh();
     } catch (err) {
@@ -63,6 +70,8 @@ const SignInPage = () => {
         `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
         }`,
       );
+
+      toast.error("লগ ইন সফল হয়নি।");
     } finally {
       setIsLoading(false);
     }

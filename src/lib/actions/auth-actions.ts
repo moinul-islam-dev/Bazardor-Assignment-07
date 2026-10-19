@@ -80,5 +80,9 @@ export const signOut = async () => {
     headers: await headers(),
   });
 
+  if (!result.success) {
+    throw new Error("Logout failed");
+  }
+
   return result;
 };

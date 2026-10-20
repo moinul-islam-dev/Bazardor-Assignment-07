@@ -33,7 +33,7 @@ export const signUp = async ({ name, email, password }: SignUpProps) => {
         name,
         email,
         password,
-        callbackURL: "http://localhost:3000/",
+        callbackURL: "/",
       },
     });
 
@@ -52,7 +52,7 @@ export const signIn = async ({ email, password }: SignInProps) => {
         email,
         password,
         rememberMe: true,
-        callbackURL: "http://localhost:3000/",
+        callbackURL: "/",
       },
     });
 
@@ -72,7 +72,7 @@ export const signInSocial = async (provider: "github" | "google") => {
     const { url } = await auth.api.signInSocial({
       body: {
         provider,
-        callbackURL: "http://localhost:3000/",
+        callbackURL: "/",
       },
     });
 

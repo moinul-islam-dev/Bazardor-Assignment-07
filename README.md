@@ -3,7 +3,7 @@
 <div align="center">
   <br />
   <a href="#-features">
-    <img width="1280" alt="Bazardor - বাজার দর" src="./banner.png" />
+    <img width="1280" alt="Bazardor - বাজার দর" src="./src/assets/screenshot.png" />
   </a>
   <br /><br />
 

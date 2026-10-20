@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import LiveDate from "../shared/header/LiveDate";
-import busket from "@/assets/busket.png"
+import basket from "@/assets/basket.png"
 
 const BannerSection = () => {
   return (
@@ -43,7 +43,7 @@ const BannerSection = () => {
             <div className="absolute -bottom-2 h-6 w-3/4 rounded-full bg-gray-200/60 blur-xs" />
             
             <Image
-              src={busket}
+              src={basket}
               alt="বাজারের ঝুড়ি"
               width={260}
               height={220}

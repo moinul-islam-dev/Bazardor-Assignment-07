@@ -168,7 +168,8 @@ bazardor-app/
 │   │   ├── not-found.tsx
 │   │   └── page.tsx
 │   ├── assets/
-│   │   └── busket.png
+|   |   ├── screenshot.png
+│   │   └── basket.png
 │   └── lib/
 │       ├── actions/
 │       │   ├── auth-actions.ts
